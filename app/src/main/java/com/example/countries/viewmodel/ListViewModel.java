@@ -3,13 +3,14 @@ package com.example.countries.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.countries.model.CountriesService;
-import com.example.countries.model.CountryModel;
+import com.example.countries.di.DaggerApiComponent;
+import com.example.countries.model.remote.CountriesService;
+import com.example.countries.model.model.CountryModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Scheduler;
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -24,7 +25,16 @@ public class ListViewModel extends ViewModel {
 
 
     //comunicandose con retrofit backend:
-    private CountriesService countriesService = CountriesService.getInstance();
+    //con Dagger:
+    @Inject
+    public CountriesService countriesService;
+    //constructor
+    public ListViewModel(){
+        super();
+        DaggerApiComponent.create().inject(this);
+    }
+    //antes de Dagger:
+//    private CountriesService countriesService = CountriesService.getInstance();
 
     private CompositeDisposable disposable = new CompositeDisposable();
 

@@ -1,4 +1,6 @@
-package com.example.countries.model;
+package com.example.countries.model.remote;
+
+import com.example.countries.model.model.CountryModel;
 
 import java.util.List;
 

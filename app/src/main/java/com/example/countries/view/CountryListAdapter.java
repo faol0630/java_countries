@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countries.R;
-import com.example.countries.model.CountryModel;
+import com.example.countries.model.model.CountryModel;
 
 import java.util.List;
 
