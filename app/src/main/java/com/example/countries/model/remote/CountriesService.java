@@ -1,6 +1,5 @@
 package com.example.countries.model.remote;
 
-import com.example.countries.di.DaggerApiComponent;
 import com.example.countries.model.model.CountryModel;
 
 import java.util.List;
@@ -16,21 +15,23 @@ public class CountriesService {
 
     private static CountriesService instance;
 
-    @Inject  //esto para cuando se cree la inyeccion de dependencias
-    public CountriesAPI api;
+    private static final String BASE_URL = "https://raw.githubusercontent.com/";
 
-//    private CountriesAPI api = new Retrofit.Builder()
-//            .baseUrl(BASE_URL)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//            .build()
-//            .create(CountriesAPI.class);
+//    @Inject  //esto para cuando se cree la inyeccion de dependencias
+//    public CountriesAPI api;
 
-    private CountriesService(){
+    private CountriesAPI api = new Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+            .create(CountriesAPI.class);
+
+    //private CountriesService(){
         //esto se deja vacio hasta que se aplique la inyeccion de dependencias
-        DaggerApiComponent.create().inject(this);
+        //DaggerApiComponent.create().inject(this);
 
-    }
+    //}
 
     public static CountriesService getInstance(){
         if (instance == null){

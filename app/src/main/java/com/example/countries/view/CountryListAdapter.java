@@ -23,10 +23,12 @@ public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.
 
     //tercero, crear la lista:
     private List<CountryModel> countries;
+    private OnClickItemInterface onClickItemInterface;
 
     //cuarto, constructor:
-    public CountryListAdapter(List<CountryModel> countries) {
+    public CountryListAdapter(List<CountryModel> countries, OnClickItemInterface onClickItemInterface) {
         this.countries = countries;
+        this.onClickItemInterface = onClickItemInterface;
     }
 
     //quinto, crear metodo que trae la info del backend:
@@ -49,6 +51,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.
     @Override
     public void onBindViewHolder(@NonNull CountryViewHolder holder, int position) {
         holder.bind(countries.get(position));
+        //holder.bind.setListener(onClickItemInterface);
     }
 
     //sexto, lista.size():

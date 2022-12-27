@@ -26,6 +26,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures{
+        viewBinding true
+    }
 }
 //add by programer:
 def lifecycleExtensionVersion = '1.1.1'
@@ -36,6 +39,8 @@ def glideVersion = '4.9.0'
 def rxJavaVersion = '2.1.1'
 def daggerVersion = '2.14.1'
 def mockitoVersion = '2.11.0 '
+def roomVersion = '2.4.3'
+def fragment_version = "1.5.5"
 
 dependencies {
 
@@ -49,8 +54,12 @@ dependencies {
     //add by programer:
     implementation "com.android.support:design:$supportVersion"
     implementation "android.arch.lifecycle:extensions:$lifecycleExtensionVersion"
+//    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleExtensionVersion"
     implementation "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    //navigation
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
@@ -69,5 +78,11 @@ dependencies {
     //mockito
     testImplementation "org.mockito:mockito-inline:$mockitoVersion"
     testImplementation "android.arch.core:core-testing:1.1.1"
+    //room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    //fragment
+    implementation "androidx.fragment:fragment:$fragment_version"
+
 
 }

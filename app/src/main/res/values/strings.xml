@@ -3,4 +3,6 @@
     <string name="errorTV">An error has occured while loading the data</string>
     <string name="country">Country</string>
     <string name="capital">Capital</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

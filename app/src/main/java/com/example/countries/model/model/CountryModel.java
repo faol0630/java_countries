@@ -2,11 +2,14 @@ package com.example.countries.model.model;
 
 import com.google.gson.annotations.SerializedName;
 
+
 public class CountryModel {
     //si no se les pone public al comienzo, no seran visibles desde afuera
     //(por defecto son private?????)
     //esa es la razon por la que se hacen setters y getters
-    @SerializedName("name")//name es el nombre que aparece en el json que viene de la web.
+
+    //@SerializedName es de retrofit para relacionar el Json con este objeto
+    @SerializedName("name") //name es el nombre que aparece en el json que viene de la web
     String countryName;
 
     @SerializedName("capital")//capital es el nombre que aparece en el json que viene de la web.
