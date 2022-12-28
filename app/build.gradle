@@ -28,6 +28,7 @@ android {
     }
     buildFeatures{
         viewBinding true
+        dataBinding true
     }
 }
 //add by programer:
@@ -53,6 +54,7 @@ dependencies {
 
     //add by programer:
     implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:palette-v7:$supportVersion"
     implementation "android.arch.lifecycle:extensions:$lifecycleExtensionVersion"
 //    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleExtensionVersion"
     implementation "com.jakewharton:butterknife:$butterknifeVersion"

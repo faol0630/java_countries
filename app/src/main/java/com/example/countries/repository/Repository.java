@@ -40,7 +40,8 @@ public class Repository {
         this.countriesAPI = countriesAPI;
     }
 
-    public Single<List<CountryModel>> getCountries(){
+    public Single<List<CountryModel>> getCountries() throws InterruptedException {
+
         return countriesAPI.getCountries();
     }
 

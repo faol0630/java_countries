@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CountriesFragment extends Fragment implements OnClickItemInterface {
+public class CountriesFragment extends Fragment implements CountryListAdapter.OnClickItemInterface {
 
     private FragmentCountriesBinding binding;
 
@@ -93,7 +93,7 @@ public class CountriesFragment extends Fragment implements OnClickItemInterface 
     }
 
     @Override
-    public void onClickItem(CountryModel countryModel, int position) {
+    public void onClickItem(CountryModel countryModel) {
         Toast.makeText(getContext(), "Detalle de cada pais", Toast.LENGTH_LONG).show();
     }
 }

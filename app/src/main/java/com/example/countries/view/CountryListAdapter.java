@@ -23,7 +23,18 @@ public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.
 
     //tercero, crear la lista:
     private List<CountryModel> countries;
+    //decimo, crear el onItemClick
     private OnClickItemInterface onClickItemInterface;
+
+    public interface OnClickItemInterface {
+
+        void onClickItem(CountryModel countryModel);
+
+    }
+
+    public void setOnClickItemInterface(OnClickItemInterface onClickItemInterface){
+        this.onClickItemInterface = onClickItemInterface;
+    }
 
     //cuarto, constructor:
     public CountryListAdapter(List<CountryModel> countries, OnClickItemInterface onClickItemInterface) {
@@ -86,6 +97,10 @@ public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.
             capitalName.setText(countryModel.getCapital());
             //despues de crear la class Util en view:
             Util.loadImage(countryImage, countryModel.getFlag(), Util.getProgressDrawable(countryImage.getContext()));
+            //parte del decimo paso , onItemClick
+            itemView.getRootView().setOnClickListener(v -> {
+                onClickItemInterface.onClickItem(countryModel);
+            });
         }
     }
 }

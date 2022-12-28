@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements OnClickItemInterface  {
+public class MainActivity extends AppCompatActivity implements CountryListAdapter.OnClickItemInterface  {
 
     private ActivityMainBinding binding;
 
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements OnClickItemInterf
 
 
     @Override
-    public void onClickItem(CountryModel countryModel, int position) {
+    public void onClickItem(CountryModel countryModel) {
         Toast.makeText(this, "Vamos al detalle de cada pais!", Toast.LENGTH_LONG).show();
     }
 }
