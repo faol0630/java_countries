@@ -29,9 +29,10 @@ public class ListViewModel extends ViewModel {
     public MutableLiveData<Boolean> loading = new MutableLiveData<Boolean>();
 
 
-    public ListViewModel(){
+    public ListViewModel() {
         super();
     }
+
     private CountriesService countriesService = CountriesService.getInstance();
 
     private CompositeDisposable disposable = new CompositeDisposable();
@@ -83,9 +84,15 @@ public class ListViewModel extends ViewModel {
 
     private AppDatabase appDatabase;
 
-    public LiveData<List<CountryModelEntity>> getAllCountries()  {
+    private final MutableLiveData<List<CountryModelEntity>> _entityList = new MutableLiveData<>();
+    public LiveData<List<CountryModelEntity>> entityList = _entityList;
 
-        return appDatabase.countryDao.getAllCountries();
+
+    public LiveData<List<CountryModelEntity>> getAllCountries() {
+
+        _entityList.setValue((List<CountryModelEntity>) appDatabase.countryDao.getAllCountries());
+
+        return _entityList;
 
     }
 
@@ -98,7 +105,7 @@ public class ListViewModel extends ViewModel {
         });
     }
 
-    public LiveData<CountryModelEntity> getCountryByName(String name)  {
+    public LiveData<CountryModelEntity> getCountryByName(String name) {
 
         return appDatabase.countryDao.getCountryByName(name);
 
@@ -122,6 +129,7 @@ public class ListViewModel extends ViewModel {
             }
         });
     }
+
 
     //-------------------------------------------------------------
     //--EndRoomViewModel----EndRoomViewModel----EndRoomViewModel---

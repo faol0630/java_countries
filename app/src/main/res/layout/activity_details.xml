@@ -45,10 +45,10 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnBack"
+        android:id="@+id/btnAddToFavorites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back to the Countries's list"
+        android:text="Add to favorites"
         android:textStyle="bold"
         android:textColor="#FFEB3B"
         android:background="#212121"

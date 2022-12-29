@@ -1,10 +1,12 @@
 package com.example.countries.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,14 +29,17 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.detailCountryName)
     TextView detailCountryName;
 
-    @BindView(R.id.btnBack)
-    AppCompatButton btnBack;
+    @BindView(R.id.btnAddToFavorites)
+    AppCompatButton btnAddToFavorites;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        //back arrow:
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //esto solamente muestra la flecha
 
         ButterKnife.bind(this);
 
@@ -50,7 +55,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         }
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        btnAddToFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DetailsActivity.this, MainActivity.class);
@@ -59,7 +64,14 @@ public class DetailsActivity extends AppCompatActivity {
         });
     }
 
-
-
-
+    //funcionalidad del back arrow:
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
