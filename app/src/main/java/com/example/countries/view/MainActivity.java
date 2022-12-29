@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -52,14 +54,14 @@ public class MainActivity extends AppCompatActivity implements CountryListAdapte
     //------------------------------------------------------------------------
     //------------------------------------------------------------------------
     //------------------------------------------------------------------------
-    //NavController navController;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        //setContentView(R.layout.activity_main);
+
 
 //        ButterKnife.bind(this);//esto pasa todas las variables al activity
 //
@@ -77,27 +79,11 @@ public class MainActivity extends AppCompatActivity implements CountryListAdapte
 
         observerViewModel();
 
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .setReorderingAllowed(true)
-//                    .add(R.id.countriesFragment, CountriesFragment.class, null)
-//                    .commit();
-//        }
-
-        //--------------------------------------------------------------------------
-
-//        navController = Navigation.findNavController(this, R.id.fragment_container_view_tag);
-//        NavigationUI.setupActionBarWithNavController(this, navController);
-
 
     }
     //-----------------------------------------------------------------------------
     //-----------------------------------------------------------------------------
     //-----------------------------------------------------------------------------
-//    @Override
-//    public boolean onSupportNavigateUp(){
-//        return navController.navigateUp();
-//    }
     //--------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------
@@ -130,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements CountryListAdapte
 
     @Override
     public void onClickItem(CountryModel countryModel) {
-        Toast.makeText(this, "Vamos al detalle de cada pais!", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("countryModel", countryModel);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

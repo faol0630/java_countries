@@ -17,9 +17,6 @@ public class CountriesService {
 
     private static final String BASE_URL = "https://raw.githubusercontent.com/";
 
-//    @Inject  //esto para cuando se cree la inyeccion de dependencias
-//    public CountriesAPI api;
-
     private CountriesAPI api = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -27,11 +24,6 @@ public class CountriesService {
             .build()
             .create(CountriesAPI.class);
 
-    //private CountriesService(){
-        //esto se deja vacio hasta que se aplique la inyeccion de dependencias
-        //DaggerApiComponent.create().inject(this);
-
-    //}
 
     public static CountriesService getInstance(){
         if (instance == null){

@@ -2,8 +2,10 @@ package com.example.countries.model.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 
-public class CountryModel {
+//implements Serializable permite que este objeto sea enviado entre activities.
+public class CountryModel implements Serializable {
     //si no se les pone public al comienzo, no seran visibles desde afuera
     //(por defecto son private?????)
     //esa es la razon por la que se hacen setters y getters
