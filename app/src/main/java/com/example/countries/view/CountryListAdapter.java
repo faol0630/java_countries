@@ -62,7 +62,6 @@ public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.
     @Override
     public void onBindViewHolder(@NonNull CountryViewHolder holder, int position) {
         holder.bind(countries.get(position));
-        //holder.bind.setListener(onClickItemInterface);
     }
 
     //sexto, lista.size():

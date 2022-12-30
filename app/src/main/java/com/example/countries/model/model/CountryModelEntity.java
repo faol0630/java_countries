@@ -26,11 +26,32 @@ public class CountryModelEntity {
     @ColumnInfo(name = "flag")
     public final String flag;
 
+    @SerializedName("region")
+    @ColumnInfo(name = "region")
+    public String region;
+
+    @SerializedName("subregion")
+    @ColumnInfo(name = "subregion")
+    public String subregion;
+
+    @SerializedName("demonym")
+    @ColumnInfo(name = "demonym")
+    public String demonym;
+
+    @SerializedName("numericCode")
+    @ColumnInfo(name = "numericCode")
+    public String numericCode;
+
+
     //constructor
-    public CountryModelEntity(String countryName, String capital, String flag) {
+    public CountryModelEntity(String countryName, String capital, String flag, String region, String subregion, String demonym, String numericCode) {
         this.countryName = countryName;
         this.capital = capital;
         this.flag = flag;
+        this.region = region;
+        this.subregion = subregion;
+        this.demonym = demonym;
+        this.numericCode = numericCode;
     }
 
     //getters and setters
@@ -46,17 +67,19 @@ public class CountryModelEntity {
         return flag;
     }
 
-    //al ser final no tiene logica usar set:
+    public String getRegion() {
+        return region;
+    }
 
-//    public void setCountryName(String countryName) {
-//        this.countryName = countryName;
-//    }
+    public String getSubregion() {
+        return subregion;
+    }
 
-//    public void setCapital(String capital) {
-//        this.capital = capital;
-//    }
+    public String getDemonym() {
+        return demonym;
+    }
 
-//    public void setFlag(String flag) {
-//        this.flag = flag;
-//    }
+    public String getNumericCode() {
+        return numericCode;
+    }
 }

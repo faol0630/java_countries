@@ -21,7 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class favoritesActivity extends AppCompatActivity {
+public class favoritesActivity extends AppCompatActivity implements CountryListAdapter.OnClickItemInterface {
 
     @BindView(R.id.rvFavCountriesList) //@BindView reemplaza al viewBinding
     RecyclerView rvFavCountriesList;
@@ -57,9 +57,8 @@ public class favoritesActivity extends AppCompatActivity {
             rvFavCountriesList.setAdapter(adapter);
 
             List<CountryModel> list = (List<CountryModel>) countryModelsEntityList.stream().map(it ->
-                    new CountryModel(it.countryName, it.capital, it.flag)
+                    new CountryModel(it.countryName, it.capital, it.flag, it.region, it.subregion, it.demonym, it.numericCode)
             );
-
 
             rvFavCountriesList.setVisibility(View.VISIBLE);
                 adapter.updateCountries(list);
@@ -81,5 +80,10 @@ public class favoritesActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onClickItem(CountryModel countryModel) {
+
     }
 }

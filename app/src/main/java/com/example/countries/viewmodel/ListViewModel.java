@@ -1,8 +1,15 @@
 package com.example.countries.viewmodel;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.room.DatabaseConfiguration;
+import androidx.room.InvalidationTracker;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import com.example.countries.model.local.AppDatabase;
 import com.example.countries.model.model.CountryModelEntity;
@@ -28,6 +35,7 @@ public class ListViewModel extends ViewModel {
     public MutableLiveData<Boolean> countryLoadError = new MutableLiveData<Boolean>();
     public MutableLiveData<Boolean> loading = new MutableLiveData<Boolean>();
 
+    private AppDatabase appDatabase;
 
     public ListViewModel() {
         super();
@@ -82,15 +90,13 @@ public class ListViewModel extends ViewModel {
 
     private final Executor executor = Executors.newSingleThreadExecutor();
 
-    private AppDatabase appDatabase;
-
     private final MutableLiveData<List<CountryModelEntity>> _entityList = new MutableLiveData<>();
     public LiveData<List<CountryModelEntity>> entityList = _entityList;
 
 
     public LiveData<List<CountryModelEntity>> getAllCountries() {
 
-        _entityList.setValue((List<CountryModelEntity>) appDatabase.countryDao.getAllCountries());
+        _entityList.setValue(appDatabase.countryDao().getAllCountries());
 
         return _entityList;
 
@@ -100,14 +106,14 @@ public class ListViewModel extends ViewModel {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                appDatabase.countryDao.insert(countryModelEntity);
+                appDatabase.countryDao().insert(countryModelEntity);
             }
         });
     }
 
     public LiveData<CountryModelEntity> getCountryByName(String name) {
 
-        return appDatabase.countryDao.getCountryByName(name);
+        return appDatabase.countryDao().getCountryByName(name);
 
     }
 
@@ -116,7 +122,7 @@ public class ListViewModel extends ViewModel {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                appDatabase.countryDao.deleteCountry(countryModelEntity);
+                appDatabase.countryDao().deleteCountry(countryModelEntity);
             }
         });
     }
@@ -125,7 +131,7 @@ public class ListViewModel extends ViewModel {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                appDatabase.countryDao.deleteAllCountries();
+                appDatabase.countryDao().deleteAllCountries();
             }
         });
     }

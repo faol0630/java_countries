@@ -5,6 +5,7 @@ package com.example.countries.view;
 import static androidx.navigation.Navigation.findNavController;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -32,22 +33,25 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements CountryListAdapter.OnClickItemInterface  {
+public class MainActivity extends AppCompatActivity implements CountryListAdapter.OnClickItemInterface {
 
     private ActivityMainBinding binding;
 
-//    @BindView(R.id.rvCountriesList) //@BindView reemplaza al viewBinding
-//    RecyclerView rvCountriesList;
-//
-//    @BindView(R.id.tvListError)
-//    TextView tvListError;
-//
-//    @BindView(R.id.pbLoadingProgressBar)
-//    ProgressBar pbLoadingProgressBar;
-//
-//    @BindView(R.id.swipeRefreshLayout)
-//    SwipeRefreshLayout swipeRefreshLayout;//reemplaza al LinearLayout en este caso
-//
+    @BindView(R.id.rvCountriesList) //@BindView reemplaza al viewBinding
+    RecyclerView rvCountriesList;
+
+    @BindView(R.id.tvListError)
+    TextView tvListError;
+
+    @BindView(R.id.pbLoadingProgressBar)
+    ProgressBar pbLoadingProgressBar;
+
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;//reemplaza al LinearLayout en este caso
+
+    @BindView(R.id.btnGoToFavorites)
+    AppCompatButton btnGoToFavorites;
+    //
     private ListViewModel viewModel;//sin instancia aca
     private final CountryListAdapter adapter = new CountryListAdapter(new ArrayList<>(), this);
 
@@ -63,21 +67,29 @@ public class MainActivity extends AppCompatActivity implements CountryListAdapte
         setContentView(binding.getRoot());
 
 
-//        ButterKnife.bind(this);//esto pasa todas las variables al activity
+        ButterKnife.bind(this);//esto pasa todas las variables al activity
 //
         viewModel = ViewModelProviders.of(this).get(ListViewModel.class);
         viewModel.refresh();
 
-        binding.rvCountriesList.setLayoutManager(new LinearLayoutManager(this));
-        binding.rvCountriesList.setAdapter(adapter);
+        rvCountriesList.setLayoutManager(new LinearLayoutManager(this));
+        rvCountriesList.setAdapter(adapter);
 //
 //        //para que no se quede el progressBar cuando se hace scroll:
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+        swipeRefreshLayout.setOnRefreshListener(() -> {
             viewModel.refresh();
-            binding.swipeRefreshLayout.setRefreshing(false);
+            swipeRefreshLayout.setRefreshing(false);
         });
 
         observerViewModel();
+
+        btnGoToFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, favoritesActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
     }
@@ -88,26 +100,26 @@ public class MainActivity extends AppCompatActivity implements CountryListAdapte
     //--------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------
 
-    private void observerViewModel(){
+    private void observerViewModel() {
         viewModel.countries.observe(this, countryModels -> {
-            if (countryModels != null ){
-                binding.rvCountriesList.setVisibility(View.VISIBLE);
+            if (countryModels != null) {
+                rvCountriesList.setVisibility(View.VISIBLE);
                 adapter.updateCountries(countryModels);
             }
         });
 
         viewModel.countryLoadError.observe(this, isError -> {
-            if (isError != null){
-                binding.tvListError.setVisibility(isError ? View.VISIBLE: View.GONE);
+            if (isError != null) {
+                tvListError.setVisibility(isError ? View.VISIBLE : View.GONE);
             }
         });
 
         viewModel.loading.observe(this, isLoading -> {
-            if (isLoading != null){
-                binding.pbLoadingProgressBar.setVisibility(isLoading ?  View.VISIBLE: View.GONE);
-                if (isLoading){
-                    binding.tvListError.setVisibility(View.GONE);
-                    binding.rvCountriesList.setVisibility(View.GONE);
+            if (isLoading != null) {
+                pbLoadingProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+                if (isLoading) {
+                    tvListError.setVisibility(View.GONE);
+                    rvCountriesList.setVisibility(View.GONE);
                 }
             }
         });
@@ -122,4 +134,6 @@ public class MainActivity extends AppCompatActivity implements CountryListAdapte
         intent.putExtras(bundle);
         startActivity(intent);
     }
+
+
 }

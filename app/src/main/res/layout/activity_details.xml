@@ -10,21 +10,20 @@
     <ImageView
         android:id="@+id/detailImageView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="280dp"
         android:padding="8dp"
         />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="300dp"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/detailCountryName"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:padding="12dp"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -34,13 +33,52 @@
         <TextView
             android:id="@+id/detailCapitalName"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textStyle="italic"
             android:textColor="#C8E6C9"
             android:padding="12dp"
             android:text="@string/capital" />
+
+        <TextView
+            android:id="@+id/detailNumericCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:textColor="#C8E6C9"
+            android:padding="12dp"
+            android:text="NumericCode" />
+
+        <TextView
+            android:id="@+id/detailDemonym"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:textColor="#C8E6C9"
+            android:padding="12dp"
+            android:text="Demonym" />
+
+        <TextView
+            android:id="@+id/detailRegion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:textColor="#C8E6C9"
+            android:padding="12dp"
+            android:text="Region" />
+
+        <TextView
+            android:id="@+id/detailSubregion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:textColor="#C8E6C9"
+            android:padding="12dp"
+            android:text="Subregion" />
 
     </LinearLayout>
 

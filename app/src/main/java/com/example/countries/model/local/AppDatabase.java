@@ -15,7 +15,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public static volatile AppDatabase instance;
     public static final Object LOCK = new Object();
 
-    public CountryDao countryDao; //aca deberia ser abstract pero da error
+    public abstract CountryDao countryDao(); //aca deberia ser abstract pero da error
 
     public static AppDatabase getInstance(Context context){
         if (instance == null){

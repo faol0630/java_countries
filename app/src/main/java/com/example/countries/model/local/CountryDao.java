@@ -2,7 +2,6 @@ package com.example.countries.model.local;
 
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -24,11 +23,11 @@ public interface CountryDao {
 
     //para traer toda la lista:
     @Query("SELECT * FROM countryModelEntity ORDER BY countryName ASC")
-    MutableLiveData<List<CountryModelEntity>> getAllCountries();
+    List<CountryModelEntity> getAllCountries();
 
     //para traer un solo elemento:
     @Query("SELECT * FROM countryModelEntity WHERE countryName = :name")
-    MutableLiveData<CountryModelEntity> getCountryByName(String name);
+    LiveData<CountryModelEntity> getCountryByName(String name);
 
     //borrar un objeto
     @Delete

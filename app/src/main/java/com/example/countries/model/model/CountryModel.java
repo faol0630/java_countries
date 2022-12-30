@@ -20,11 +20,27 @@ public class CountryModel implements Serializable {
     @SerializedName("flagPNG")//flagPNG es el nombre que aparece en el json que viene de la web.
     String flag;
 
+    @SerializedName("region")
+    String region;
+
+    @SerializedName("subregion")
+    String subregion;
+
+    @SerializedName("demonym")
+    String demonym;
+
+    @SerializedName("numericCode")
+    String numericCode;
+
     //constructor
-    public CountryModel(String countryName, String capital, String flag) {
+    public CountryModel(String countryName, String capital, String flag, String region, String subregion, String demonym, String numericCode) {
         this.countryName = countryName;
         this.capital = capital;
         this.flag = flag;
+        this.region = region;
+        this.subregion = subregion;
+        this.demonym = demonym;
+        this.numericCode = numericCode;
     }
 
     //getters
@@ -40,4 +56,19 @@ public class CountryModel implements Serializable {
         return flag;
     }
 
+    public String getRegion() {
+        return region;
+    }
+
+    public String getSubregion() {
+        return subregion;
+    }
+
+    public String getDemonym() {
+        return demonym;
+    }
+
+    public String getNumericCode() {
+        return numericCode;
+    }
 }
