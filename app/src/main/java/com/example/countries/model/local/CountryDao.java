@@ -1,7 +1,8 @@
 package com.example.countries.model.local;
 
 
-import androidx.lifecycle.LiveData;
+import static androidx.room.OnConflictStrategy.REPLACE;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -21,13 +22,17 @@ public interface CountryDao {
     //en la vista se debe hacer un mapping del country que viene de la web al
     //countryEntity de room para poder ingresarlo en la lista de room.
 
+    //para meter toda la lista que viene de Retrofit en Room
+    @Insert(onConflict = REPLACE)
+    void saveAllRoomCountryItems(List<CountryModelEntity> countries);
+
     //para traer toda la lista:
     @Query("SELECT * FROM countryModelEntity ORDER BY countryName ASC")
-    List<CountryModelEntity> getAllCountries();
+    List<CountryModelEntity> getAllRoomCountries();
 
     //para traer un solo elemento:
     @Query("SELECT * FROM countryModelEntity WHERE countryName = :name")
-    LiveData<CountryModelEntity> getCountryByName(String name);
+    CountryModelEntity getCountryByName(String name);
 
     //borrar un objeto
     @Delete
@@ -45,5 +50,8 @@ public interface CountryDao {
 
     @Update
     int updateCountry(CountryModelEntity countryModelEntity);
+
+    @Query("Delete FROM countryModelEntity WHERE countryname = :name")
+    void deleteCountry(String name);
 
 }

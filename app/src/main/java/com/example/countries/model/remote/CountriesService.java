@@ -4,7 +4,6 @@ import com.example.countries.model.model.CountryModel;
 
 import java.util.List;
 
-import javax.inject.Inject;
 
 import io.reactivex.Single;
 import retrofit2.Retrofit;
@@ -13,29 +12,39 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CountriesService {
 
-    private static CountriesService instance;
-
-    private static final String BASE_URL = "https://raw.githubusercontent.com/";
-
-    private CountriesAPI api = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
+    private static final Retrofit retrofitInstance = new Retrofit.Builder()
+            .baseUrl(ConstantsAPI.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-            .create(CountriesAPI.class);
+            .build();
 
-
-    public static CountriesService getInstance(){
-        if (instance == null){
-            instance = new CountriesService();
-        }
-        return instance;
+    //empty private constructor
+    private CountriesService() {
     }
 
-    public Single<List<CountryModel>> getCountries(){
-        return api.getCountries();
+    public static Retrofit getRetrofitInstance(){
+        return retrofitInstance;
     }
 
+    //private static CountriesService instance;
+
+//    private CountriesAPI api = new Retrofit.Builder()
+//            .baseUrl(ConstantsAPI.BASE_URL)
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//            .build()
+//            .create(CountriesAPI.class);
+
+
+//    public static CountriesService getInstance(){
+//        if (instance == null){
+//            instance = new CountriesService();
+//        }
+//        return instance;
+//    }
+//
+//    public Single<List<CountryModel>> getCountries(){
+//        return api.getCountries();
+//    }
 
 }
 

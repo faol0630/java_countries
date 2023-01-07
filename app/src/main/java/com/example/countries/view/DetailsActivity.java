@@ -3,6 +3,7 @@ package com.example.countries.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.countries.R;
+import com.example.countries.model.model.Country;
 import com.example.countries.model.model.CountryModel;
 import com.example.countries.model.model.CountryModelEntity;
 import com.example.countries.viewmodel.ListViewModel;
@@ -50,7 +52,8 @@ public class DetailsActivity extends AppCompatActivity {
     TextView detailSubregion;
 
     //viewModel para poder enviar el objeto a room:
-    private ListViewModel viewModel;
+    //se va a usar cuando se cree el respectivo metodo en repository y en viewModel
+    //private ListViewModel viewModel;
 
 
     @Override
@@ -61,45 +64,40 @@ public class DetailsActivity extends AppCompatActivity {
         //back arrow:
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //esto solamente muestra la flecha
 
-        viewModel = ViewModelProviders.of(this).get(ListViewModel.class);
+        //viewModel = new ViewModelProvider(this).get(ListViewModel.class);
 
         ButterKnife.bind(this);
 
-        Bundle countryModelFromRV = getIntent().getExtras();
-        CountryModel countryModel = null;
+        Bundle bundle = getIntent().getExtras();
+        Country country = null; //dejarlo aca afuera para que sea reconocido por el btn addToFavorites
 
-        if (countryModelFromRV != null){
-            countryModel = (CountryModel) countryModelFromRV.getSerializable("countryModel");
+        if (bundle != null){
+            country = (Country) bundle.getSerializable("country");
 
-            detailCountryName.setText(countryModel.getCountryName());
-            detailCapitalName.setText(countryModel.getCapital());
-            Util.loadImage(detailImageView, countryModel.getFlag(), Util.getProgressDrawable(detailImageView.getContext()));
-            detailRegion.setText(countryModel.getRegion());
-            detailSubregion.setText(countryModel.getSubregion());
-            detailDemonym.setText(countryModel.getDemonym());
-            detailNumericCode.setText(countryModel.getNumericCode());
+            detailCountryName.setText(country.getCountryName());
+            detailCapitalName.setText(country.getCapital());
+            Util.loadImage(detailImageView, country.getFlag(), Util.getProgressDrawable(detailImageView.getContext()));
+            detailRegion.setText(country.getRegion());
+            detailSubregion.setText(country.getSubregion());
+            detailDemonym.setText(country.getDemonym());
+            detailNumericCode.setText(country.getNumericCode());
 
         }
 
-        CountryModel finalCountryModel = countryModel;
+        Country finalCountry = country;
         btnAddToFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 String countryName = detailCountryName.getText().toString();
                 String capitalName = detailCapitalName.getText().toString();
-                String flag = "";
-                String region = finalCountryModel.getRegion();
-                String subregion = finalCountryModel.getSubregion();
-                String demonym = finalCountryModel.getDemonym();
-                String numericCode = finalCountryModel.getNumericCode();
+                Util.loadImage(detailImageView, finalCountry.getFlag(), Util.getProgressDrawable(detailImageView.getContext()));
+                String region = finalCountry.getRegion();
+                String subregion = finalCountry.getSubregion();
+                String demonym = finalCountry.getDemonym();
+                String numericCode = finalCountry.getNumericCode();
 
-                //estos elementos vienen del objeto CountryModel y van a ser pasados al
-                //CountryModelEntity como parametros
-
-                CountryModelEntity countryModelEntity = new CountryModelEntity(countryName, capitalName, flag, region, subregion, demonym, numericCode);
-
-                viewModel.insertCountry(countryModelEntity);
+                //viewModel.insertCountry(countryModelEntity); //este metodo hay que crearlo en repository y en viewModel
 
                 Toast.makeText(DetailsActivity.this, "Add to favorites", Toast.LENGTH_SHORT).show();
 

@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.MainActivity"
     android:id="@+id/swipeRefreshLayout"
-    android:background="#212121"
-    >
+    android:background="#757575">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:strokeColor="#212121"
+            app:strokeWidth="2dp"
+            app:cornerRadius="12dp"
+            app:elevation="10dp"
+            app:rippleColor="#F44336"
             android:id="@+id/btnGoToFavorites"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/go_to_favorites"
+            android:text="Favorites"
             android:textStyle="bold"
-            android:textColor="#FFEB3B"
-            android:background="#212121"
+            android:padding="12dp"
+            android:textColor="#212121"
             android:layout_margin="12dp"
             />
+
+<!--        rippleColor para cambiar el color cuando se pulsa-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCountriesList"

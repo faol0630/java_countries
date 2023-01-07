@@ -3,139 +3,85 @@ package com.example.countries.viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.room.DatabaseConfiguration;
-import androidx.room.InvalidationTracker;
-import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import com.example.countries.model.local.AppDatabase;
+import com.example.countries.model.model.Country;
 import com.example.countries.model.model.CountryModelEntity;
-import com.example.countries.model.remote.CountriesService;
-import com.example.countries.model.model.CountryModel;
+import com.example.countries.model.remote.RemoteDataAccess;
+import com.example.countries.repository.AsyncTaskReceiver;
+import com.example.countries.repository.CountryRepository;
+import com.example.countries.repository.mapper.CountryModelEntityMapper;
+import com.example.countries.repository.mapper.CountryModelMapper;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import javax.inject.Inject;
+public class ListViewModel extends AndroidViewModel {
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
+    private final CountryRepository repository;
 
-public class ListViewModel extends ViewModel {
-
-    //livedata son objetos observables que generan valores
-    public MutableLiveData<List<CountryModel>> countries = new MutableLiveData<List<CountryModel>>();
-    public MutableLiveData<Boolean> countryLoadError = new MutableLiveData<Boolean>();
-    public MutableLiveData<Boolean> loading = new MutableLiveData<Boolean>();
-
-    private AppDatabase appDatabase;
-
-    public ListViewModel() {
-        super();
-    }
-
-    private CountriesService countriesService = CountriesService.getInstance();
-
-    private CompositeDisposable disposable = new CompositeDisposable();
-
-    public void refresh() {
-        fetchCountries();
-    }
-
-    private void fetchCountries() {
-
-        loading.setValue(true);
-        disposable.add(
-                //conecta con retrofit service:
-                countriesService.getCountries()
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(new DisposableSingleObserver<List<CountryModel>>() {
-
-                            @Override
-                            public void onSuccess(List<CountryModel> countryModels) {
-                                countries.setValue(countryModels);
-                                countryLoadError.setValue(false);
-                                loading.setValue(false);
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                countryLoadError.setValue(true);
-                                loading.setValue(false);
-                                e.printStackTrace();
-                            }
-                        })
-
+    public ListViewModel(@NonNull Application application) {
+        super(application);
+        repository = new CountryRepository(
+                AppDatabase.getInstance(application),
+                RemoteDataAccess.getRemoteDataInstance(),
+                CountryModelEntityMapper.getInstance(),
+                CountryModelMapper.getInstance()
         );
-
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        disposable.clear();
+    private final MutableLiveData<List<Country>> itemLiveData = new MutableLiveData<>();//este se usa para el postValue
+
+    public LiveData<List<Country>> getCountriesLiveData(){
+        return itemLiveData;
+    }  //sobre esto se monta el observer en el activity
+
+    public void requestCountryItems(){ //este es el metodo que se llama dentro de onCreate en el activity
+        //dentro del getPicturesItems de repository está room incluido.Por lo tanto con este llamado
+        //se llaman las dos cosas.Por eso aca no hay logica de Room.
+        repository.getCountryItems(new AsyncTaskReceiver<List<Country>>() {
+            @Override
+            public void onSuccess(List<Country> result) {
+                itemLiveData.postValue(result);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
     }
 
     //-------------------------------------------------------------
     //-----RoomViewModel------RoomViewModel------RoomViewModel-----
     //-------------------------------------------------------------
+    //PARA MOSTRAR TODA LA LISTA DE ROOM EN EL ACTIVITY FAVORITES:
 
-    private final Executor executor = Executors.newSingleThreadExecutor();
+    private final MutableLiveData<List<Country>> itemRoomLiveData = new MutableLiveData<>();//este se usa para el postValue
 
-    private final MutableLiveData<List<CountryModelEntity>> _entityList = new MutableLiveData<>();
-    public LiveData<List<CountryModelEntity>> entityList = _entityList;
+    public LiveData<List<Country>> getRoomCountriesLiveData(){ //sobre esto se monta el observer en el activity
+        return itemRoomLiveData;
+    }  //sobre esto se monta el observer en el activity
 
 
-    public LiveData<List<CountryModelEntity>> getAllCountries() {
+    public void requestRoomCountryItems(){
 
-        _entityList.setValue(appDatabase.countryDao().getAllCountries());
-
-        return _entityList;
-
-    }
-
-    public void insertCountry(CountryModelEntity countryModelEntity) {
-        executor.execute(new Runnable() {
+        repository.getRoomCountryItems(new AsyncTaskReceiver<List<Country>>() {
             @Override
-            public void run() {
-                appDatabase.countryDao().insert(countryModelEntity);
+            public void onSuccess(List<Country> result) {
+                itemRoomLiveData.postValue(result);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
             }
         });
     }
-
-    public LiveData<CountryModelEntity> getCountryByName(String name) {
-
-        return appDatabase.countryDao().getCountryByName(name);
-
-    }
-
-
-    public void deleteCountry(CountryModelEntity countryModelEntity) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                appDatabase.countryDao().deleteCountry(countryModelEntity);
-            }
-        });
-    }
-
-    public void deleteAllCountries() {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                appDatabase.countryDao().deleteAllCountries();
-            }
-        });
-    }
-
 
     //-------------------------------------------------------------
     //--EndRoomViewModel----EndRoomViewModel----EndRoomViewModel---

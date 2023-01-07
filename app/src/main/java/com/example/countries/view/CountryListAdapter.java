@@ -9,9 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.countries.R;
+import com.example.countries.model.model.Country;
 import com.example.countries.model.model.CountryModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,33 +25,28 @@ import butterknife.ButterKnife;
 public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.CountryViewHolder> {
 
     //tercero, crear la lista:
-    private List<CountryModel> countries;
+    private List<Country> countries = new ArrayList<>();
     //decimo, crear el onItemClick
     private OnClickItemInterface onClickItemInterface;
 
     public interface OnClickItemInterface {
 
-        void onClickItem(CountryModel countryModel);
+        void onClickItem(Country country);
 
-    }
-
-    public void setOnClickItemInterface(OnClickItemInterface onClickItemInterface){
-        this.onClickItemInterface = onClickItemInterface;
     }
 
     //cuarto, constructor:
-    public CountryListAdapter(List<CountryModel> countries, OnClickItemInterface onClickItemInterface) {
-        this.countries = countries;
+    public CountryListAdapter(OnClickItemInterface onClickItemInterface) {
         this.onClickItemInterface = onClickItemInterface;
     }
 
     //quinto, crear metodo que trae la info del backend:
     //newCountries es el nombre del parametro.
-    public void updateCountries (List<CountryModel> newCountries){
-        countries.clear();
-        countries.addAll(newCountries);
-        notifyDataSetChanged(); //informa al sistema de todos los cambios
-    }
+//    public void updateCountries (List<CountryModel> newCountries){
+//        countries.clear();
+//        countries.addAll(newCountries);
+//        notifyDataSetChanged(); //informa al sistema de todos los cambios
+//    }
 
     //septimo, crear aca el ViewHolder:
     @NonNull
@@ -61,7 +59,13 @@ public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.
     //noveno, implementar holder aca:
     @Override
     public void onBindViewHolder(@NonNull CountryViewHolder holder, int position) {
-        holder.bind(countries.get(position));
+        holder.countryName.setText(countries.get(position).getCountryName());
+        holder.capitalName.setText(countries.get(position).getCapital());
+        Glide.with(holder.itemView.getContext()).
+                load(countries.get(position).getFlag()).into(holder.countryImage);
+        //click en cada item del recyclerView
+        holder.itemView.getRootView().setOnClickListener(v -> onClickItemInterface.onClickItem(countries.get(position)));
+
     }
 
     //sexto, lista.size():
@@ -70,8 +74,13 @@ public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.
         return countries.size();
     }
 
+    public void setCountries(List<Country> countries){
+        this.countries = countries;
+        notifyDataSetChanged();
+    }
+
     //primero, viewHolder:
-    class CountryViewHolder extends RecyclerView.ViewHolder {
+    static class CountryViewHolder extends RecyclerView.ViewHolder {
 
         //octavo, traer los elementos del itemView:
         //parecido al viewBinding:
@@ -90,16 +99,5 @@ public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.
             ButterKnife.bind(this, itemView);//esto pasa todas las variables del itemView al adapter
         }
 
-        //country individual(no lista, hace parte del octavo paso)
-        void bind(CountryModel countryModel){
-            countryName.setText(countryModel.getCountryName());
-            capitalName.setText(countryModel.getCapital());
-            //despues de crear la class Util en view:
-            Util.loadImage(countryImage, countryModel.getFlag(), Util.getProgressDrawable(countryImage.getContext()));
-            //parte del decimo paso , onItemClick
-            itemView.getRootView().setOnClickListener(v -> {
-                onClickItemInterface.onClickItem(countryModel);
-            });
-        }
     }
 }

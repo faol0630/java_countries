@@ -6,4 +6,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="go_to_favorites">Go to favorites</string>
+    <string name="numeric_code">Numeric Code</string>
+    <string name="demonym">Demonym</string>
+    <string name="region">Region</string>
+    <string name="subregion">Subregion</string>
+    <string name="add_to_favorites">Add to favorites</string>
+    <string name="flag">flag</string>
 </resources>

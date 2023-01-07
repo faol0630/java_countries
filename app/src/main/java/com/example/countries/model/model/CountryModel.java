@@ -33,15 +33,15 @@ public class CountryModel implements Serializable {
     String numericCode;
 
     //constructor
-    public CountryModel(String countryName, String capital, String flag, String region, String subregion, String demonym, String numericCode) {
-        this.countryName = countryName;
-        this.capital = capital;
-        this.flag = flag;
-        this.region = region;
-        this.subregion = subregion;
-        this.demonym = demonym;
-        this.numericCode = numericCode;
-    }
+//    public CountryModel(String countryName, String capital, String flag, String region, String subregion, String demonym, String numericCode) {
+//        this.countryName = countryName;
+//        this.capital = capital;
+//        this.flag = flag;
+//        this.region = region;
+//        this.subregion = subregion;
+//        this.demonym = demonym;
+//        this.numericCode = numericCode;
+//    }
 
     //getters
     public String getCountryName() {
@@ -70,5 +70,34 @@ public class CountryModel implements Serializable {
 
     public String getNumericCode() {
         return numericCode;
+    }
+    //setters
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public void setCapital(String capital) {
+        this.capital = capital;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public void setSubregion(String subregion) {
+        this.subregion = subregion;
+    }
+
+    public void setDemonym(String demonym) {
+        this.demonym = demonym;
+    }
+
+    public void setNumericCode(String numericCode) {
+        this.numericCode = numericCode;
     }
 }
