@@ -13,12 +13,11 @@ import com.example.countries.model.model.CountryModelEntity;
 import com.example.countries.model.remote.RemoteDataAccess;
 import com.example.countries.repository.AsyncTaskReceiver;
 import com.example.countries.repository.CountryRepository;
+import com.example.countries.repository.ExecutorSupplier;
 import com.example.countries.repository.mapper.CountryModelEntityMapper;
 import com.example.countries.repository.mapper.CountryModelMapper;
 
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class ListViewModel extends AndroidViewModel {
 
@@ -34,16 +33,15 @@ public class ListViewModel extends AndroidViewModel {
         );
     }
 
-    private final MutableLiveData<List<Country>> itemLiveData = new MutableLiveData<>();//este se usa para el postValue
+    private final MutableLiveData<List<Country>> itemLiveData = new MutableLiveData<>();//postValue
 
-    public LiveData<List<Country>> getCountriesLiveData(){
+    public LiveData<List<Country>> getCountriesLiveData() {
         return itemLiveData;
-    }  //sobre esto se monta el observer en el activity
+    }  //observer
 
-    public void requestCountryItems(){ //este es el metodo que se llama dentro de onCreate en el activity
-        //dentro del getPicturesItems de repository está room incluido.Por lo tanto con este llamado
-        //se llaman las dos cosas.Por eso aca no hay logica de Room.
-        repository.getCountryItems(new AsyncTaskReceiver<List<Country>>() {
+    public void requestCountryItems() {
+
+        ExecutorSupplier.getInstance().execute(() -> repository.getCountryItems(new AsyncTaskReceiver<List<Country>>() {
             @Override
             public void onSuccess(List<Country> result) {
                 itemLiveData.postValue(result);
@@ -53,24 +51,18 @@ public class ListViewModel extends AndroidViewModel {
             public void onFailure(Throwable throwable) {
 
             }
-        });
+        }));
     }
 
-    //-------------------------------------------------------------
-    //-----RoomViewModel------RoomViewModel------RoomViewModel-----
-    //-------------------------------------------------------------
-    //PARA MOSTRAR TODA LA LISTA DE ROOM EN EL ACTIVITY FAVORITES:
+    private final MutableLiveData<List<Country>> itemRoomLiveData = new MutableLiveData<>();//postValue
 
-    private final MutableLiveData<List<Country>> itemRoomLiveData = new MutableLiveData<>();//este se usa para el postValue
-
-    public LiveData<List<Country>> getRoomCountriesLiveData(){ //sobre esto se monta el observer en el activity
+    public LiveData<List<Country>> getRoomCountriesLiveData() { //observer
         return itemRoomLiveData;
-    }  //sobre esto se monta el observer en el activity
+    }
 
+    public void requestRoomCountryItems() {
 
-    public void requestRoomCountryItems(){
-
-        repository.getRoomCountryItems(new AsyncTaskReceiver<List<Country>>() {
+        ExecutorSupplier.getInstance().execute(() -> repository.getRoomCountryItems(new AsyncTaskReceiver<List<Country>>() {
             @Override
             public void onSuccess(List<Country> result) {
                 itemRoomLiveData.postValue(result);
@@ -80,11 +72,26 @@ public class ListViewModel extends AndroidViewModel {
             public void onFailure(Throwable throwable) {
 
             }
-        });
+        }));
     }
 
-    //-------------------------------------------------------------
-    //--EndRoomViewModel----EndRoomViewModel----EndRoomViewModel---
-    //-------------------------------------------------------------
+    public void saveRoomCountryVM(CountryModelEntity countryModelEntity) {
+
+        ExecutorSupplier.getInstance().execute(() -> repository.saveRoomCountry(countryModelEntity));
+
+
+    }
+
+    public void deleteCountryVM(CountryModelEntity countryModelEntity) {
+
+        ExecutorSupplier.getInstance().execute(() -> repository.deleteCountry(countryModelEntity));
+
+    }
+
+    public void deleteAllRoomCountriesVM() {
+
+        ExecutorSupplier.getInstance().execute(repository::deleteAllRoomCountries);
+
+    }
 
 }

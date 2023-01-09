@@ -1,5 +1,6 @@
 package com.example.countries.model.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -11,18 +12,17 @@ import org.jetbrains.annotations.NotNull;
 @Entity(tableName = "countryModelEntity")
 public class CountryModelEntity {
 
-    //@SerializedName es de retrofit para relacionar el Json con este objeto.
     @PrimaryKey
     @NotNull
-    @SerializedName("name")//name es el nombre que aparece en el json que viene de la web.
+    @SerializedName("name")
     @ColumnInfo(name = "countryName")
     public final String countryName;
 
-    @SerializedName("capital")//capital es el nombre que aparece en el json que viene de la web.
+    @SerializedName("capital")
     @ColumnInfo(name = "capital")
     public final String capital;
 
-    @SerializedName("flagPNG")//flagPNG es el nombre que aparece en el json que viene de la web.
+    @SerializedName("flagPNG")
     @ColumnInfo(name = "flag")
     public final String flag;
 
@@ -42,9 +42,7 @@ public class CountryModelEntity {
     @ColumnInfo(name = "numericCode")
     public String numericCode;
 
-
-    //constructor
-    public CountryModelEntity(String countryName, String capital, String flag, String region, String subregion, String demonym, String numericCode) {
+    public CountryModelEntity(@NonNull String countryName, String capital, String flag, String region, String subregion, String demonym, String numericCode) {
         this.countryName = countryName;
         this.capital = capital;
         this.flag = flag;
@@ -54,7 +52,7 @@ public class CountryModelEntity {
         this.numericCode = numericCode;
     }
 
-    //getters and setters
+    @NonNull
     public String getCountryName() {
         return countryName;
     }

@@ -29,7 +29,7 @@ public class CountryModelEntityMapper implements ObjectMapper<CountryModelEntity
         return new CountryModelEntity(object.getCountryName(), object.getCapital(), object.getFlag(), object.getRegion(), object.getSubregion(), object.getDemonym(), object.getNumericCode()) ;
     }
 
-    //minimo tener minSdk 24 para lo siguiente:
+    //minSdk 24:
     @Override
     public List<CountryModelEntity> fromModel(List<Country> object) {
         return object.stream().map(this::fromModel).collect(Collectors.toList());

@@ -14,4 +14,3 @@ public interface CountriesAPI {
 
 }
 
-//single es un tipo de observador que emite un solo valor y termina

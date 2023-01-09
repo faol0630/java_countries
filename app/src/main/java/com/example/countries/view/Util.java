@@ -11,7 +11,7 @@ import com.example.countries.R;
 
 public class Util {
 
-    public static void loadImage(ImageView view, String url, CircularProgressDrawable progressDrawable){
+    public static String loadImage(ImageView view, String url, CircularProgressDrawable progressDrawable){
         RequestOptions options = new RequestOptions()
                 .placeholder(progressDrawable)
                 .error(R.mipmap.ic_launcher_round);
@@ -20,6 +20,7 @@ public class Util {
                 .setDefaultRequestOptions(options)
                 .load(url)
                 .into(view);
+        return url;
     }
 
     public static CircularProgressDrawable getProgressDrawable(Context context){

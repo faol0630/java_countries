@@ -18,10 +18,10 @@ import retrofit2.Response;
 
 public class CountryRepository {
 
-    private AppDatabase localStorage; //Room
-    private RemoteDataAccess remote; //Retrofit
-    private CountryModelEntityMapper entityMapper;
-    private CountryModelMapper dtoMapper;
+    private final AppDatabase localStorage; //Room
+    private final RemoteDataAccess remote; //Retrofit
+    private final CountryModelEntityMapper entityMapper;
+    private final CountryModelMapper dtoMapper;
 
     public CountryRepository(AppDatabase localStorage, RemoteDataAccess remote, CountryModelEntityMapper entityMapper, CountryModelMapper dtoMapper) {
         this.localStorage = localStorage;
@@ -30,32 +30,34 @@ public class CountryRepository {
         this.dtoMapper = dtoMapper;
     }
 
-    //lamada a la lista de Room:
-
     public void getRoomCountryItems(AsyncTaskReceiver<List<Country>> callback) {
 
         ExecutorSupplier.getInstance().execute(() -> {
-            //lista del entity
-            //esto no puede estar por fuera de la funcion:
+
             List<CountryModelEntity> localItems = localStorage.countryDao().getAllRoomCountries();
-            //En caso de conexion exitosa, del entity al neutro
             callback.onSuccess(entityMapper.toModel(localItems));
         });
 
     }
 
+    public void saveRoomCountry(CountryModelEntity countryModelEntity){
+
+        ExecutorSupplier.getInstance().execute(() -> localStorage.countryDao().insertCountry(countryModelEntity));
+    }
+
+    public void deleteCountry(CountryModelEntity countryModelEntity){
+
+        ExecutorSupplier.getInstance().execute(() -> localStorage.countryDao().deleteCountry(countryModelEntity));
+    }
+
+    public void deleteAllRoomCountries(){
+
+        ExecutorSupplier.getInstance().execute(localStorage::clearAllTables);
+    }
+
 
     public void getCountryItems(AsyncTaskReceiver<List<Country>> callback) {
 
-//        ExecutorSupplier.getInstance().execute(() -> {
-//            //lista del entity
-//            //esto no puede estar por fuera de la funcion:
-//            List<CountryModelEntity> localItems = localStorage.countryDao().getAllRoomCountries();
-//            //En caso de conexion exitosa, del entity al neutro
-//            callback.onSuccess(entityMapper.toModel(localItems));
-//        });
-
-        //llamado a la lista del DTO remote
         Call<List<CountryModel>> call = remote.getCountriesItemFromRemoteDataAccess().getCountries();
 
 
@@ -65,19 +67,9 @@ public class CountryRepository {
                     (@NonNull Call<List<CountryModel>> call, @NonNull Response<List<CountryModel>> response) {
                 if (response.body() != null && !response.body().isEmpty()) {
 
-                    //del DTO a neutro
-                    //esto no puede estar por fuera de la funcion:
                     List<Country> items = dtoMapper.toModel(response.body());
 
-                    callback.onSuccess(items); //del DTO al neutro
-
-                    //--------------------------------------------
-                    //salvar toda la info que viene de retrofit en Room:
-//                    ExecutorSupplier.getInstance().execute(() -> {
-//                        //convirtiendo de neutro a entity:
-//                        localStorage.countryDao().saveAllRoomCountryItems(entityMapper.fromModel(items)); ; //se deben salvar en modo Entity
-//                    });
-
+                    callback.onSuccess(items);
 
                 }
             }
@@ -89,6 +81,5 @@ public class CountryRepository {
         });
 
     }
-
 
 }

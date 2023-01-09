@@ -1,6 +1,5 @@
 package com.example.countries.model.model;
 
-import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -8,17 +7,17 @@ public class Country implements Serializable {
 
     private String countryName;
 
-    private String capital;
+    private final String capital;
 
-    private String flag;
+    private final String flag;
 
     private String region;
 
     private String subregion;
 
-    private String demonym;
+    private final String demonym;
 
-    private String numericCode;
+    private final String numericCode;
 
     public Country(String countryName, String capital, String flag, String region, String subregion, String demonym, String numericCode) {
         this.countryName = countryName;
@@ -42,16 +41,8 @@ public class Country implements Serializable {
         return capital;
     }
 
-    public void setCapital(String capital) {
-        this.capital = capital;
-    }
-
     public String getFlag() {
         return flag;
-    }
-
-    public void setFlag(String flag) {
-        this.flag = flag;
     }
 
     public String getRegion() {
@@ -74,15 +65,8 @@ public class Country implements Serializable {
         return demonym;
     }
 
-    public void setDemonym(String demonym) {
-        this.demonym = demonym;
-    }
-
     public String getNumericCode() {
         return numericCode;
     }
 
-    public void setNumericCode(String numericCode) {
-        this.numericCode = numericCode;
-    }
 }

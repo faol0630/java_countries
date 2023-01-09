@@ -21,39 +21,38 @@ import com.example.countries.viewmodel.ListViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailsActivity extends AppCompatActivity {
+public class FavoriteDetailsActivity extends AppCompatActivity {
 
+    @BindView(R.id.favoritesDetailImageView)
+    ImageView favoritesDetailImageView;
 
-    @BindView(R.id.detailImageView)
-    ImageView detailImageView;
+    @BindView(R.id.favoritesDetailCapitalName)
+    TextView favoritesDetailCapitalName;
 
-    @BindView(R.id.detailCapitalName)
-    TextView detailCapitalName;
+    @BindView(R.id.favoritesDetailCountryName)
+    TextView favoritesDetailCountryName;
 
-    @BindView(R.id.detailCountryName)
-    TextView detailCountryName;
+    @BindView(R.id.btnDeleteFromFavorites)
+    AppCompatButton btnDeleteFromFavorites;
 
-    @BindView(R.id.btnAddToFavorites)
-    AppCompatButton btnAddToFavorites;
+    @BindView(R.id.favoritesDetailNumericCode)
+    TextView favoritesDetailNumericCode;
 
-    @BindView(R.id.detailNumericCode)
-    TextView detailNumericCode;
+    @BindView(R.id.favoritesDetailDemonym)
+    TextView favoritesDetailDemonym;
 
-    @BindView(R.id.detailDemonym)
-    TextView detailDemonym;
+    @BindView(R.id.favoritesDetailRegion)
+    TextView favoritesDetailRegion;
 
-    @BindView(R.id.detailRegion)
-    TextView detailRegion;
-
-    @BindView(R.id.detailSubregion)
-    TextView detailSubregion;
+    @BindView(R.id.favoritesDetailSubregion)
+    TextView favoritesDetailSubregion;
 
     private ListViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        setContentView(R.layout.activity_favorite_details);
 
         //back arrow:
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -68,23 +67,22 @@ public class DetailsActivity extends AppCompatActivity {
         if (bundle != null) {
             country = (Country) bundle.getSerializable("country");
 
-            detailCountryName.setText(country.getCountryName());
-            detailCapitalName.setText(country.getCapital());
+            favoritesDetailCountryName.setText(country.getCountryName());
+            favoritesDetailCapitalName.setText(country.getCapital());
             Glide.with(getBaseContext()).
-                    load(country.getFlag()).into(detailImageView);
-            detailRegion.setText(country.getRegion());
-            detailSubregion.setText(country.getSubregion());
-            detailDemonym.setText(country.getDemonym());
-            detailNumericCode.setText(country.getNumericCode());
+                    load(country.getFlag()).into(favoritesDetailImageView);
+            favoritesDetailRegion.setText(country.getRegion());
+            favoritesDetailSubregion.setText(country.getSubregion());
+            favoritesDetailDemonym.setText(country.getDemonym());
+            favoritesDetailNumericCode.setText(country.getNumericCode());
 
         }
-
         Country finalCountry = country;
-        btnAddToFavorites.setOnClickListener(view -> {
+        btnDeleteFromFavorites.setOnClickListener(v -> {
 
-            String countryName = detailCountryName.getText().toString();
-            String capitalName = detailCapitalName.getText().toString();
-            String image = Util.loadImage(detailImageView, finalCountry.getFlag(), Util.getProgressDrawable(detailImageView.getContext()));
+            String countryName = favoritesDetailCountryName.getText().toString();
+            String capitalName = favoritesDetailCapitalName.getText().toString();
+            String image = Util.loadImage(favoritesDetailImageView, finalCountry.getFlag(), Util.getProgressDrawable(favoritesDetailImageView.getContext()));
             String region = finalCountry.getRegion();
             String subregion = finalCountry.getSubregion();
             String demonym = finalCountry.getDemonym();
@@ -94,12 +92,13 @@ public class DetailsActivity extends AppCompatActivity {
                     countryName, capitalName, image, region, subregion, demonym, numericCode
             );
 
-            viewModel.saveRoomCountryVM(countryModelEntity);
+            viewModel.deleteCountryVM(countryModelEntity);
 
-            Toast.makeText(DetailsActivity.this, "Add to favorites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(FavoriteDetailsActivity.this, "Deleted from favorites", Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(DetailsActivity.this, MainActivity.class);
+            Intent intent = new Intent(FavoriteDetailsActivity.this, MainActivity.class);
             startActivity(intent);
+
 
         });
     }

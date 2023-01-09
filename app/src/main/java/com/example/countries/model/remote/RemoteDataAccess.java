@@ -1,13 +1,10 @@
 package com.example.countries.model.remote;
 
-import com.example.countries.model.model.CountryModel;
-
 public class RemoteDataAccess {
 
-    //singleton
     private static final RemoteDataAccess remoteDataInstance = new RemoteDataAccess();
 
-    //private constructor
+    //empty private constructor
     private RemoteDataAccess(){
 
     }
