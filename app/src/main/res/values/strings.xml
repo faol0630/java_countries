@@ -13,4 +13,5 @@
     <string name="add_to_favorites">Add to favorites</string>
     <string name="flag">flag</string>
     <string name="delete_from_favorites">Delete from favorites</string>
+    <string name="empty_list_or_failure_conexion">Empty list or failure conexion</string>
 </resources>
