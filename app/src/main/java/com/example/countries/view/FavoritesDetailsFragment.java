@@ -3,6 +3,7 @@ package com.example.countries.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -107,19 +108,28 @@ public class FavoritesDetailsFragment extends Fragment {
 
             viewModel.deleteCountryVM(countryModelEntity);
 
-            Toast.makeText(getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Deleted from favorites", Toast.LENGTH_SHORT).show();
 
             Fragment homeFragment = new HomeFragment();
-//            getFragmentManager()
-//                    .beginTransaction()
-//                    .replace()
-//                    .addToBackStack("home_fragment", homeFragment)
-//                    .commit();
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, homeFragment, "home_fragment")
+                    .addToBackStack("home_fragment")
+                    .commit();
 
 
         });
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            getActivity().onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

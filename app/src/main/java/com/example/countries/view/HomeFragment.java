@@ -32,9 +32,6 @@ public class HomeFragment extends Fragment implements CountryListAdapter.OnClick
     @BindView(R.id.tvListError)
     TextView tvListError;
 
-    @BindView(R.id.llActivityMain)
-    LinearLayout llActivityMain;
-
     @BindView(R.id.btnGoToFavorites)
     AppCompatButton btnGoToFavorites;
 
@@ -76,11 +73,11 @@ public class HomeFragment extends Fragment implements CountryListAdapter.OnClick
 
         btnGoToFavorites.setOnClickListener(v -> {
             Fragment favoritesFragment = new FavoritesFragment();
-//            getFragmentManager()
-//                    .beginTransaction()
-//                    .replace()
-//                    .addToBackStack("favorites_fragment", favoritesFragment)
-//                    .commit();
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, favoritesFragment, "favorites_fragment")
+                    .addToBackStack("favorites_fragment")
+                    .commit();
         });
 
         return view;
@@ -92,11 +89,11 @@ public class HomeFragment extends Fragment implements CountryListAdapter.OnClick
         bundle.putSerializable("country", country);
         Fragment detailsFragment = new DetailsFragment();
         detailsFragment.setArguments(bundle);
-//        getFragmentManager()
-//                .beginTransaction()
-//                .replace()
-//                .addToBackStack("details_fragment", detailsFragment)
-//                .commit();
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, detailsFragment, "details_fragment")
+                .addToBackStack("details_fragment")
+                .commit();
 
     }
 

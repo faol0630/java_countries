@@ -3,9 +3,11 @@ package com.example.countries.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -92,9 +94,20 @@ public class FavoritesFragment extends Fragment implements CountryListAdapter.On
             rvFavCountriesList.setVisibility(View.GONE);
             tvFavListError.setVisibility(View.VISIBLE);
 
+            Toast.makeText(getContext(), "All favorites list deleted", Toast.LENGTH_SHORT).show();
+
         });
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            getActivity().onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -103,11 +116,11 @@ public class FavoritesFragment extends Fragment implements CountryListAdapter.On
         bundle.putSerializable("country", country);
         Fragment favoritesDetailsFragment = new FavoritesDetailsFragment();
         favoritesDetailsFragment.setArguments(bundle);
-//        getFragmentManager()
-//                .beginTransaction()
-//                .replace()
-//                .addToBackStack("favorites_details_fragment", favoritesDetailsFragment)
-//                .commit();
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, favoritesDetailsFragment, "favorites_details_fragment")
+                .addToBackStack("favorites_details_fragment")
+                .commit();
 
     }
 

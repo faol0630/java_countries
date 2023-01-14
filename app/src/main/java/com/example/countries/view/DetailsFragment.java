@@ -108,14 +108,14 @@ public class DetailsFragment extends Fragment {
 
             viewModel.saveRoomCountryVM(countryModelEntity);
 
-            Toast.makeText(getContext(), "Add to favorites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
 
             Fragment homeFragment = new HomeFragment();
-//            getFragmentManager()
-//                    .beginTransaction()
-//                    .replace()
-//                    .addToBackStack("home_fragment", homeFragment)
-//                    .commit();
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, homeFragment, "home_fragment")
+                    .addToBackStack("home_fragment")
+                    .commit();
 
         });
 

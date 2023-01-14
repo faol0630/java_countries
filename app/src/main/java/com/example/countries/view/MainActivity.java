@@ -4,11 +4,15 @@ package com.example.countries.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,73 +25,29 @@ import com.example.countries.viewmodel.ListViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements CountryListAdapter.OnClickItemInterface {
+public class MainActivity extends AppCompatActivity{
 
-    @BindView(R.id.rvCountriesList)
-    RecyclerView rvCountriesList;
-
-    @BindView(R.id.tvListError)
-    TextView tvListError;
-
-    @BindView(R.id.llActivityMain)
-    LinearLayout llActivityMain;
-
-    @BindView(R.id.btnGoToFavorites)
-    AppCompatButton btnGoToFavorites;
-
-    private ListViewModel viewModel;
-    private CountryListAdapter adapter;
-
+    @BindView(R.id.fragmentContainer)
+    FrameLayout fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        openFragment(new HomeFragment());
+
         ButterKnife.bind(this);
 
-        adapter = new CountryListAdapter(this);
-        rvCountriesList.setAdapter(adapter);
-        rvCountriesList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
-        viewModel = new ViewModelProvider(this).get(ListViewModel.class);
-
-        viewModel.getCountriesLiveData().observe(this, countryItems -> {
-            adapter.setCountries(countryItems);
-
-            if (!countryItems.isEmpty()) {
-
-                rvCountriesList.setVisibility(View.VISIBLE);
-                tvListError.setVisibility(View.GONE);
-
-            } else {
-                rvCountriesList.setVisibility(View.GONE);
-                tvListError.setVisibility(View.VISIBLE);
-
-            }
-
-        });
-
-        viewModel.requestCountryItems();
-
-        btnGoToFavorites.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
-            startActivity(intent);
-        });
-
-
-
     }
 
+    //inflar el fragment en este activity:
+    private void openFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer, fragment);
+        fragmentTransaction.commit();
 
-    @Override
-    public void onClickItem(Country country) {
-        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("country", country);
-        intent.putExtras(bundle);
-        startActivity(intent);
     }
-
 
 }
