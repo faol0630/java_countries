@@ -1,6 +1,5 @@
 package com.example.countries.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,54 +22,51 @@ import com.example.countries.model.model.Country;
 import com.example.countries.model.model.CountryModelEntity;
 import com.example.countries.viewmodel.ListViewModel;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import java.util.Objects;
 
 public class DetailsFragment extends Fragment {
 
-    @BindView(R.id.detailImageView)
     ImageView detailImageView;
 
-    @BindView(R.id.detailCapitalName)
     TextView detailCapitalName;
 
-    @BindView(R.id.detailCountryName)
     TextView detailCountryName;
 
-    @BindView(R.id.btnAddToFavorites)
     AppCompatButton btnAddToFavorites;
 
-    @BindView(R.id.detailNumericCode)
     TextView detailNumericCode;
 
-    @BindView(R.id.detailDemonym)
     TextView detailDemonym;
 
-    @BindView(R.id.detailRegion)
     TextView detailRegion;
 
-    @BindView(R.id.detailSubregion)
     TextView detailSubregion;
 
     private ListViewModel viewModel;
-
-    private Unbinder unbinder; //para liberar cuando se termina
-
-    //back arrow:
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setHasOptionsMenu(true);
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.details_fragment, container,false);
-        unbinder = ButterKnife.bind(this, view); //diferente a como se hace en activity
+        return inflater.inflate(R.layout.details_fragment, container, false);
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //back arrow:
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        setHasOptionsMenu(true);
+
+        detailImageView = (ImageView) requireView().findViewById(R.id.detailImageView);
+        detailCapitalName = (TextView) requireView().findViewById(R.id.detailCapitalName);
+        detailCountryName = (TextView) requireView().findViewById(R.id.detailCountryName);
+        btnAddToFavorites = (AppCompatButton) requireView().findViewById(R.id.btnAddToFavorites);
+        detailNumericCode = (TextView) requireView().findViewById(R.id.detailNumericCode);
+        detailDemonym = (TextView) requireView().findViewById(R.id.detailDemonym);
+        detailRegion = (TextView) requireView().findViewById(R.id.detailRegion);
+        detailSubregion = (TextView) requireView().findViewById(R.id.detailSubregion);
 
         viewModel = new ViewModelProvider(this).get(ListViewModel.class);
 
@@ -82,7 +78,7 @@ public class DetailsFragment extends Fragment {
 
             detailCountryName.setText(country.getCountryName());
             detailCapitalName.setText(country.getCapital());
-            Glide.with(getContext()).
+            Glide.with(requireContext()).
                     load(country.getFlag()).into(detailImageView);
             detailRegion.setText(country.getRegion());
             detailSubregion.setText(country.getSubregion());
@@ -111,7 +107,7 @@ public class DetailsFragment extends Fragment {
             Toast.makeText(getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
 
             Fragment homeFragment = new HomeFragment();
-            getFragmentManager()
+            requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, homeFragment, "home_fragment")
                     .addToBackStack("home_fragment")
@@ -119,13 +115,15 @@ public class DetailsFragment extends Fragment {
 
         });
 
-        return view;
-
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            requireActivity().onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
+
 }

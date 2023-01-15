@@ -1,6 +1,5 @@
 package com.example.countries.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,56 +22,48 @@ import com.example.countries.model.model.Country;
 import com.example.countries.model.model.CountryModelEntity;
 import com.example.countries.viewmodel.ListViewModel;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+
+import java.util.Objects;
+
 
 public class FavoritesDetailsFragment extends Fragment {
 
-    @BindView(R.id.favoritesDetailImageView)
     ImageView favoritesDetailImageView;
 
-    @BindView(R.id.favoritesDetailCapitalName)
     TextView favoritesDetailCapitalName;
 
-    @BindView(R.id.favoritesDetailCountryName)
     TextView favoritesDetailCountryName;
 
-    @BindView(R.id.btnDeleteFromFavorites)
     AppCompatButton btnDeleteFromFavorites;
 
-    @BindView(R.id.favoritesDetailNumericCode)
     TextView favoritesDetailNumericCode;
 
-    @BindView(R.id.favoritesDetailDemonym)
     TextView favoritesDetailDemonym;
 
-    @BindView(R.id.favoritesDetailRegion)
     TextView favoritesDetailRegion;
 
-    @BindView(R.id.favoritesDetailSubregion)
     TextView favoritesDetailSubregion;
 
     private ListViewModel viewModel;
 
-    private Unbinder unbinder; //para liberar cuando se termina
 
-    //back arrow:
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        //back arrow:
+        super.onViewCreated(view, savedInstanceState);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setHasOptionsMenu(true);
-    }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.favorites_details_fragment, container, false);
+        favoritesDetailImageView = (ImageView) requireView().findViewById(R.id.favoritesDetailImageView);
+        favoritesDetailCapitalName = (TextView) requireView().findViewById(R.id.favoritesDetailCapitalName);
+        favoritesDetailCountryName = (TextView) requireView().findViewById(R.id.favoritesDetailCountryName);
+        btnDeleteFromFavorites = (AppCompatButton) requireView().findViewById(R.id.btnDeleteFromFavorites);
+        favoritesDetailNumericCode = (TextView) requireView().findViewById(R.id.favoritesDetailNumericCode);
+        favoritesDetailDemonym = (TextView) requireView().findViewById(R.id.favoritesDetailDemonym);
+        favoritesDetailRegion = (TextView) requireView().findViewById(R.id.favoritesDetailRegion);
+        favoritesDetailSubregion = (TextView) requireView().findViewById(R.id.favoritesDetailSubregion);
 
         viewModel = new ViewModelProvider(this).get(ListViewModel.class);
-
-        unbinder = ButterKnife.bind(this, view);
 
         Bundle bundle = getArguments();
         Country country = null;
@@ -82,7 +73,7 @@ public class FavoritesDetailsFragment extends Fragment {
 
             favoritesDetailCountryName.setText(country.getCountryName());
             favoritesDetailCapitalName.setText(country.getCapital());
-            Glide.with(getContext()).
+            Glide.with(requireContext()).
                     load(country.getFlag()).into(favoritesDetailImageView);
             favoritesDetailRegion.setText(country.getRegion());
             favoritesDetailSubregion.setText(country.getSubregion());
@@ -111,7 +102,7 @@ public class FavoritesDetailsFragment extends Fragment {
             Toast.makeText(getContext(), "Deleted from favorites", Toast.LENGTH_SHORT).show();
 
             Fragment homeFragment = new HomeFragment();
-            getFragmentManager()
+            requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, homeFragment, "home_fragment")
                     .addToBackStack("home_fragment")
@@ -120,21 +111,22 @@ public class FavoritesDetailsFragment extends Fragment {
 
         });
 
-        return view;
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        return inflater.inflate(R.layout.favorites_details_fragment, container, false);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            getActivity().onBackPressed();
+            requireActivity().onBackPressed();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 }

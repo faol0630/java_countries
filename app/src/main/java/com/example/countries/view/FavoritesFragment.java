@@ -1,6 +1,5 @@
 package com.example.countries.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,41 +23,38 @@ import com.example.countries.viewmodel.ListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
-public class FavoritesFragment extends Fragment implements CountryListAdapter.OnClickItemInterface{
+public class FavoritesFragment extends Fragment implements CountryListAdapter.OnClickItemInterface {
 
-    @BindView(R.id.rvFavCountriesList)
     RecyclerView rvFavCountriesList;
 
-    @BindView(R.id.btnDeleteAllFavoritesCountries)
     AppCompatButton btnDeleteAllFavoritesCountries;
 
-    @BindView(R.id.tvFavListError)
     TextView tvFavListError;
 
     private ListViewModel viewModel;
     private CountryListAdapter adapter;
 
-    private Unbinder unbinder; //para liberar cuando se termina
-
-    //back arrow:
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setHasOptionsMenu(true);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.favorites_fragment, container, false);
 
-        unbinder = ButterKnife.bind(this, view);
+        return inflater.inflate(R.layout.favorites_fragment, container, false);
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        //back arrow:
+        super.onViewCreated(view, savedInstanceState);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        setHasOptionsMenu(true);
+
+        rvFavCountriesList = (RecyclerView) requireView().findViewById(R.id.rvFavCountriesList);
+        btnDeleteAllFavoritesCountries = (AppCompatButton) requireView().findViewById(R.id.btnDeleteAllFavoritesCountries);
+        tvFavListError = (TextView) requireView().findViewById(R.id.tvFavListError);
 
         adapter = new CountryListAdapter(this);
         rvFavCountriesList.setAdapter(adapter);
@@ -98,14 +94,14 @@ public class FavoritesFragment extends Fragment implements CountryListAdapter.On
 
         });
 
-        return view;
+
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            getActivity().onBackPressed();
+            requireActivity().onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -116,7 +112,7 @@ public class FavoritesFragment extends Fragment implements CountryListAdapter.On
         bundle.putSerializable("country", country);
         Fragment favoritesDetailsFragment = new FavoritesDetailsFragment();
         favoritesDetailsFragment.setArguments(bundle);
-        getFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, favoritesDetailsFragment, "favorites_details_fragment")
                 .addToBackStack("favorites_details_fragment")

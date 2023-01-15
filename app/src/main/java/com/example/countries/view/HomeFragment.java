@@ -1,11 +1,9 @@
 package com.example.countries.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,38 +18,33 @@ import com.example.countries.R;
 import com.example.countries.model.model.Country;
 import com.example.countries.viewmodel.ListViewModel;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 public class HomeFragment extends Fragment implements CountryListAdapter.OnClickItemInterface {
 
-    @BindView(R.id.rvCountriesList)
     RecyclerView rvCountriesList;
 
-    @BindView(R.id.tvListError)
     TextView tvListError;
 
-    @BindView(R.id.btnGoToFavorites)
     AppCompatButton btnGoToFavorites;
 
-    private ListViewModel viewModel;
     private CountryListAdapter adapter;
-
-    private Unbinder unbinder; //para liberar cuando se termina
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_fragment, container, false);
+        return inflater.inflate(R.layout.home_fragment, container, false);
+    }
 
-        unbinder = ButterKnife.bind(this, view);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        rvCountriesList = (RecyclerView) requireView().findViewById(R.id.rvCountriesList);
+        tvListError = (TextView) requireView().findViewById(R.id.tvListError);
+        btnGoToFavorites = (AppCompatButton) requireView().findViewById(R.id.btnGoToFavorites);
         adapter = new CountryListAdapter(this);
         rvCountriesList.setAdapter(adapter);
         rvCountriesList.setLayoutManager(new LinearLayoutManager(this.requireContext(), LinearLayoutManager.VERTICAL, false));
 
-        viewModel = new ViewModelProvider(this).get(ListViewModel.class);
+        ListViewModel viewModel = new ViewModelProvider(this).get(ListViewModel.class);
 
         viewModel.getCountriesLiveData().observe(requireActivity(), countryItems -> {
             adapter.setCountries(countryItems);
@@ -73,14 +66,13 @@ public class HomeFragment extends Fragment implements CountryListAdapter.OnClick
 
         btnGoToFavorites.setOnClickListener(v -> {
             Fragment favoritesFragment = new FavoritesFragment();
-            getFragmentManager()
+            requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, favoritesFragment, "favorites_fragment")
                     .addToBackStack("favorites_fragment")
                     .commit();
         });
 
-        return view;
     }
 
     @Override
@@ -89,7 +81,7 @@ public class HomeFragment extends Fragment implements CountryListAdapter.OnClick
         bundle.putSerializable("country", country);
         Fragment detailsFragment = new DetailsFragment();
         detailsFragment.setArguments(bundle);
-        getFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, detailsFragment, "details_fragment")
                 .addToBackStack("details_fragment")
@@ -97,9 +89,4 @@ public class HomeFragment extends Fragment implements CountryListAdapter.OnClick
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }
