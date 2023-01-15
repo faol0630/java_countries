@@ -1,5 +1,6 @@
 package com.example.countries.view;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,6 @@ import com.example.countries.model.model.Country;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 
 public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.CountryViewHolder> {
 
@@ -58,6 +55,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.
         return countries.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setCountries(List<Country> countries){
         this.countries = countries;
         notifyDataSetChanged();
@@ -65,18 +63,17 @@ public class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.
 
     static class CountryViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.imageView)
         ImageView countryImage;
 
-        @BindView(R.id.countryName)
         TextView countryName;
 
-        @BindView(R.id.capitalName)
         TextView capitalName;
 
         public CountryViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            countryImage = itemView.findViewById(R.id.imageView);
+            countryName = itemView.findViewById(R.id.countryName);
+            capitalName = itemView.findViewById(R.id.capitalName);
         }
 
     }
