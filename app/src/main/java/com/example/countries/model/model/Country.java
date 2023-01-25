@@ -33,10 +33,6 @@ public class Country implements Serializable {
         return countryName;
     }
 
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
-    }
-
     public String getCapital() {
         return capital;
     }
